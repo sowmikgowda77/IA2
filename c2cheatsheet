@@ -1,0 +1,82 @@
+# Step 1: Update Jenkins Plugins
+1. Login to Jenkins.
+2. Go to Manage Jenkins → Plugins.
+3. Update/Install:
+   - Git Plugin
+   - Pipeline Plugin
+   - Maven Integration Plugin
+
+# Step 2: Create Jenkinsfile
+1. In your project repo, create a file named Jenkinsfile.
+2. Add the following content:
+
+   pipeline {
+       agent any
+       tools {
+           maven 'Maven3'
+       }
+       stages {
+           stage('CHECKOUT') {
+               steps {
+                   git 'your_github_repo_link'
+               }
+           }
+           stage('Build') {
+               steps {
+                   dir('demo') {
+                       bat 'mvn clean install'
+                   }
+               }
+           }
+           stage('Test') {
+               steps {
+                   dir('demo') {
+                       bat 'mvn test'
+                   }
+               }
+           }
+       }
+   }
+
+3. Push Jenkinsfile to your GitHub repo:
+   git add Jenkinsfile
+   git commit -m "Add Jenkins pipeline"
+   git push
+
+# Step 3: Configure Maven in Jenkins
+1. Go to Manage Jenkins → Tools.
+2. Under Maven installations:
+   - Name = Maven3
+   - Uncheck "Install automatically"
+   - Maven Home path = C:\Program Files\maven
+3. Save.
+
+# Step 4: Trigger Build
+1. In Jenkins, create a Pipeline job linked to your repo.
+2. Click "Build Now" to run the pipeline.
+
+# Step 5: Slack Notification Setup
+1. Login to slack.com and create a workspace (e.g., hello-odm9638).
+2. Go to: https://my.slack.com/services/new/jenkins-ci
+3. Select your workspace → Generate token.
+4. Copy the token.
+
+# Step 6: Configure Slack in Jenkins
+1. Manage Jenkins → System.
+2. Scroll to Slack configuration:
+   - Slack Workspace = hello-odm9638
+   - Credential = Add → Secret text
+     - Secret = (paste copied token)
+     - ID = slack-token
+   - Channel = (channel name from Slack)
+3. Save.
+
+# Step 7: Test Slack Notification
+1. Create a Freestyle project in Jenkins.
+2. Configure build step:
+   - Windows batch command: echo Jenkins
+3. In Post-build actions:
+   - Select "Slack Notification"
+   - Check all options (Success, Failure, etc.)
+4. Save and Build.
+5. Verify notification in Slack channel.
