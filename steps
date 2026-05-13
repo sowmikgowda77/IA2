@@ -1,0 +1,283 @@
+1. What is Docker?
+
+Docker is a platform used to develop, package, and run applications inside containers.
+
+A container is a lightweight package that contains:
+
+Application code
+Libraries
+Dependencies
+Runtime environment
+
+This helps the application run the same way on:
+
+Your laptop
+Testing server
+Production server
+Why Docker is used
+Eliminates “works on my machine” problem
+Easy deployment
+Faster than virtual machines
+Portable and scalable
+Useful in DevOps and CI/CD pipelines
+2. Docker Architecture
+
+Docker follows a Client-Server architecture.
+
+Main Components
+1. Docker Client
+
+The command line where users type commands like:
+
+docker build
+docker run
+docker ps
+2. Docker Daemon (dockerd)
+
+Background service that:
+
+Builds containers
+Runs containers
+Manages images and networks
+3. Docker Images
+
+Read-only templates used to create containers.
+
+Example:
+
+ubuntu
+nginx
+node
+mysql
+4. Docker Containers
+
+Running instances of Docker images.
+
+Example:
+
+docker run nginx
+5. Docker Registry
+
+Stores Docker images.
+
+Main registry:
+Docker Hub
+
+Docker Architecture Flow
+User
+  ↓
+Docker Client
+  ↓
+Docker Daemon
+  ↓
+Images → Containers
+  ↓
+Docker Registry (Docker Hub)
+3. What is Jenkins?
+
+Jenkins is an open-source CI/CD automation tool.
+
+CI/CD means:
+
+CI → Continuous Integration
+CD → Continuous Delivery/Deployment
+
+Jenkins automates:
+
+Build
+Testing
+Deployment
+Why Jenkins is used
+
+Instead of manually:
+
+Writing code
+Compiling
+Testing
+Deploying
+
+Jenkins does it automatically whenever code changes.
+
+Jenkins Workflow
+Developer pushes code to GitHub
+        ↓
+Jenkins detects change
+        ↓
+Build project
+        ↓
+Run tests
+        ↓
+Deploy application
+4. What is JDK?
+
+Java Development Kit (JDK) is a package required to develop and run Java applications.
+
+It contains:
+
+JRE (Java Runtime Environment)
+Java Compiler (javac)
+Java libraries
+Development tools
+Difference Between JDK, JRE, JVM
+Component	Purpose
+JVM	Runs Java bytecode
+JRE	Provides environment to run Java apps
+JDK	Used to develop Java applications
+5. How to Install JDK on Windows
+Step 1: Download JDK
+
+Go to:
+
+Oracle JDK Downloads
+
+OR
+
+OpenJDK (Temurin) Downloads
+
+Step 2: Install
+Download Windows .exe
+Double click installer
+Click Next → Install
+
+Example path:
+
+C:\Program Files\Java\jdk-21
+Step 3: Set Environment Variables
+Open:
+This PC → Properties → Advanced System Settings → Environment Variables
+Create JAVA_HOME
+
+Under System Variables:
+
+Variable Name:
+JAVA_HOME
+Variable Value:
+C:\Program Files\Java\jdk-21
+Edit PATH
+
+Add:
+
+%JAVA_HOME%\bin
+Step 4: Verify Installation
+
+Open CMD:
+
+java -version
+javac -version
+
+If installed correctly:
+
+java version "21"
+6. How to Install Docker on Windows
+Requirements
+Windows 10/11
+Virtualization enabled in BIOS
+WSL2 support
+Step 1: Download Docker Desktop
+
+Go to:
+
+Docker Desktop for Windows
+
+Step 2: Install Docker Desktop
+Run installer
+Enable:
+WSL2
+Hyper-V (if asked)
+
+Restart system after installation.
+
+Step 3: Start Docker
+
+Open Docker Desktop.
+
+Wait until:
+
+Docker Engine running
+Step 4: Verify Installation
+
+Open CMD:
+
+docker --version
+
+Check Docker working:
+
+docker run hello-world
+
+If successful:
+
+Hello from Docker!
+7. How to Install Jenkins on Windows
+Prerequisite
+
+JDK must already be installed.
+
+Step 1: Download Jenkins
+
+Go to:
+
+Jenkins Official Website
+
+Download:
+
+Windows installer (.msi)
+Step 2: Install Jenkins
+Run .msi
+Choose installation path
+Jenkins installs as Windows service
+Step 3: Start Jenkins
+
+Open browser:
+
+http://localhost:8080
+Step 4: Unlock Jenkins
+
+Password file location:
+
+C:\Program Files\Jenkins\secrets\initialAdminPassword
+
+Copy password into browser.
+
+Step 5: Install Suggested Plugins
+
+Click:
+
+Install Suggested Plugins
+Step 6: Create Admin User
+
+Set:
+
+Username
+Password
+Email
+8. Basic DevOps Flow Using All
+Java Code
+   ↓
+Build using Maven
+   ↓
+Jenkins automates build
+   ↓
+Docker creates container
+   ↓
+Application deployed
+Important Commands
+Docker Commands
+docker images
+docker ps
+docker ps -a
+docker run nginx
+docker stop <container_id>
+docker rm <container_id>
+Jenkins Service Commands (Windows)
+net start jenkins
+net stop jenkins
+Recommended Versions
+Software	Recommended
+JDK	17 or 21
+Docker Desktop	Latest
+Jenkins	Latest LTS
+Best Installation Order
+Install JDK
+Install Docker Desktop
+Install Jenkins
+Verify all installations
