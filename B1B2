@@ -1,0 +1,160 @@
+B2:
+
+Prerequisites (already installed on your system)
+
+· Jenkins running (http://localhost:8080)
+· Docker installed on the Jenkins agent (your Windows machine)
+· Git installed
+· Jenkins plugins: Pipeline, Git, Credentials Binding, Docker Pipeline
+
+---
+
+Step 1: Prepare your Git repository
+
+Create a repository (local or GitHub) with these three files:
+
+HelloWorld.java
+
+```java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello from Jenkins!");
+    }
+}
+```
+
+Dockerfile
+
+```dockerfile
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY HelloWorld.java .
+RUN javac HelloWorld.java
+CMD ["java", "HelloWorld"]
+```
+
+Jenkinsfile (the pipeline definition)
+
+```groovy
+pipeline {
+    agent any
+    environment {
+        DOCKER_CREDENTIAL_ID = 'Docker'   // matches your Jenkins credential ID
+        IMAGE_NAME = ''   // your Docker Hub repo
+    }
+    stages {
+        stage('Build Java Application') {
+            steps {
+                bat 'javac HelloWorld.java'
+            }
+        }
+        stage('Run Java Program') {
+            steps {
+                bat 'java HelloWorld'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                bat "docker build -t ${env.IMAGE_NAME}:latest ."
+            }
+        }
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: env.DOCKER_CREDENTIAL_ID,
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    bat "docker login -u %USER% -p %PASS%"
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                bat "docker push ${env.IMAGE_NAME}:latest"
+            }
+        }
+    }
+    post {
+        always {
+            bat 'docker logout'
+        }
+    }
+}
+```
+
+---
+
+Step 2: Add Docker Hub credentials in Jenkins
+
+1. Dashboard → Manage Jenkins → Credentials → System → Global credentials → Add Credentials
+2. Kind: Username with password
+3. Username: your Docker Hub username (iamprajwal99)
+4. Password: your Docker Hub password (or access token – recommended)
+5. ID: Docker (exactly as in the Jenkinsfile)
+6. Description: Docker Hub credentials
+7. Click Create
+
+---
+
+Step 3: Create a new Pipeline job in Jenkins
+
+1. Dashboard → New Item
+2. Enter a name: Docker-pipeline (or any name)
+3. Select Pipeline → OK
+4. Under Pipeline section:
+   · Definition: Pipeline script from SCM
+   · SCM: Git
+   · Repository URL: https://github.com/Prajwalgb99/Docker_push.git (or your local repo path)
+   · Branches to build: */main
+   · Script Path: Jenkinsfile
+5. Click Save
+
+---
+
+Step 4: Run the pipeline
+
+· Click Build Now
+· Watch the console output – stages will execute in order:
+  1. Build Java Application – compiles HelloWorld.java
+  2. Run Java Program – prints Hello from Jenkins!
+  3. Build Docker Image – creates image using Dockerfile
+  4. Login to DockerHub – uses stored credentials
+  5. Push Docker Image – pushes iamprajwal99/docker_image:latest
+
+Successful output (as you already saw):
+
+```
+Login Succeeded
+The push refers to repository [docker.io/iamprajwal99/docker_image]
+...
+Finished: SUCCESS
+```
+
+---
+
+Step 5: Verify the image on Docker Hub
+
+· Go to hub.docker.com
+· Log in → Repositories → iamprajwal99/docker_image – you'll see the latest tag.
+
+---
+
+Quick exam notes for B2
+
+Component Purpose
+agent any Run on any available Jenkins agent
+environment Define variables (IMAGE_NAME, credentials ID)
+withCredentials Securely pass Docker Hub username/password
+bat Execute Windows batch commands (javac, docker, etc.)
+post { always } Run docker logout even if build fails
+
+---
+
+If you need to run B2 again (troubleshooting)
+
+· Docker not recognized? → Ensure Docker Desktop is running and Jenkins has permission (add Jenkins user to docker-users group on Windows)
+· Login fails? → Re‑enter credentials in Jenkins; use an access token (not password) if 2FA is enabled on Docker Hub
+· Push fails? → Verify image name exactly matches your Docker Hub username/repo
+
+Your B2 is already working. For the lab, just be ready to explain each stage. Good luck!
