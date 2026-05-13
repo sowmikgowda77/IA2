@@ -1,0 +1,50 @@
+# Step 1: Build Docker Image from Your Folder
+cd your-folder-name
+docker build -t imagename .
+
+# Step 2: Add a Tag
+docker tag imagename yourdockerhubusername/imagename:tagname
+# Example:
+docker tag myapp akshatha123/myapp:v1
+
+# Step 3: Login to Docker Hub
+docker login
+# OR using access token:
+echo YOUR_TOKEN | docker login -u your-username --password-stdin
+
+# Step 4: Push Image to Docker Hub
+docker push yourdockerhubusername/imagename:tagname
+# Example:
+docker push akshatha123/myapp:v1
+
+# Step 5: Verify on Docker Hub
+# Go to https://hub.docker.com and check your repository
+
+# Step 6: Push the Code to GitHub
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/yourusername/docker_demo.git
+git push -u origin main
+
+# Step 7: Add Docker Hub Credentials in Jenkins
+1. Open Jenkins
+2. Manage Jenkins → Credentials → Configure Credentials
+3. Add:
+   Kind: Username & Password
+   ID: dockerhub-creds
+   Username: your Docker Hub username
+   Password: Docker Hub Access Token
+
+# Step 8: Create Jenkins Pipeline Job
+1. Jenkins Dashboard → New Item
+2. Select "Pipeline"
+3. Configure:
+   Pipeline → Pipeline script from SCM
+   SCM → Git
+   Repo URL → https://github.com/yourusername/docker_demo.git
+   Script Path → Jenkinsfile
+
+# Step 9: Build Now (manual)
+Click "Build Now" in Jenkins to trigger the pipeline.
