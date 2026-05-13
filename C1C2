@@ -1,0 +1,193 @@
+Step 1: Open Eclipse IDE
+
+Start Eclipse IDE.
+
+Step 2: Create Maven Project
+
+Go to:
+
+File → New → Maven Project
+
+Keep checked:
+
+Use default Workspace location
+
+Do NOT check:
+
+Create a simple project (skip archetype selection)
+
+Click:
+
+Next
+Step 3: Select Maven Archetype
+
+Search:
+
+maven-archetype-quickstart
+
+Select:
+
+org.apache.maven.archetypes:maven-archetype-quickstart
+
+Click:
+
+Next
+Step 4: Enter Project Details
+
+Enter:
+
+Group Id    : com.example
+Artifact Id : JsonMavenProject
+Version     : 0.0.1-SNAPSHOT
+
+Click:
+
+Finish
+
+Maven project gets created successfully.
+
+Step 5: Open pom.xml
+
+Open:
+
+pom.xml
+Step 6: Add JSON Dependency
+
+Inside the <dependencies> section add:
+
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency>
+
+Final <dependencies> section:
+
+<dependencies>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+
+</dependencies>
+
+Save using:
+
+Ctrl + S
+Step 7: Update Maven Project
+
+Right-click project:
+
+JsonMavenProject
+
+Select:
+
+Maven → Update Project
+
+Check:
+
+Force Update of Snapshots/Releases
+
+Click:
+
+OK
+
+Wait until dependencies download.
+
+Step 8: Create JSON File
+
+Right-click project:
+
+New → File
+
+File name:
+
+emp.json
+
+Click:
+
+Finish
+Step 9: Add JSON Data
+
+Open emp.json and add:
+
+{
+  "fName": "Aj",
+  "lName": "ML"
+}
+
+Save the file.
+
+Step 10: Open App.java
+
+Go to:
+
+src/main/java
+
+Open:
+
+App.java
+Step 11: Replace Existing Code
+
+Delete existing code and paste:
+
+package com.example.JsonMavenProject;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.FileReader;
+
+public class App {
+
+    public static void main(String[] args) {
+
+        JSONParser parser = new JSONParser();
+
+        try {
+
+            Object obj = parser.parse(new FileReader("emp.json"));
+
+            JSONObject jsonObject = (JSONObject) obj;
+
+            String fName = (String) jsonObject.get("fName");
+            String lName = (String) jsonObject.get("lName");
+
+            System.out.println("First Name : " + fName);
+            System.out.println("Last Name  : " + lName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Save using:
+
+Ctrl + S
+Step 12: Run the Program
+
+Right-click:
+
+App.java
+
+Select:
+
+Run As → Java Application
+Output
+First Name : Aj
+Last Name  : ML
